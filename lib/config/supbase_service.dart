@@ -5,9 +5,10 @@ abstract class SupbaseService {
   Future<void> initSupabase(String url, String apiKey);
   Future<void> createData({required TableData tableData, required Map<String, dynamic> data});
   Future<dynamic> fetchData(String id);
-  Future<void> updateData(
+  Future<void> updateDataById(
       {required TableData tableData, required int id, required Map<String, dynamic> data});
-  Future<void> deleteData(String id);
+  Future<void> deleteDataById(
+      {required TableData tableData, required int id, required Map<String, dynamic> data});
 }
 
 class SupbaseConfig extends SupbaseService {
@@ -30,9 +31,9 @@ class SupbaseConfig extends SupbaseService {
   }
 
   @override
-  Future<void> deleteData(String id) {
-    // TODO: implement deleteData
-    throw UnimplementedError();
+  Future<void> deleteDataById(
+      {required TableData tableData, required int id, required Map<String, dynamic> data}) async {
+    await client?.from(TableSupabase.getTable(tableData).toString()).update(data).eq('id', 1);
   }
 
   @override
@@ -41,15 +42,16 @@ class SupbaseConfig extends SupbaseService {
     throw UnimplementedError();
   }
 
+  @override
   Future<void> updateDataById(
       {required TableData tableData, required int id, required Map<String, dynamic> data}) async {
     await client?.from(TableSupabase.getTable(tableData).toString()).update(data).eq('id', 1);
   }
 
-  @override
-  Future<void> updateData(
-      {required TableData tableData, required int id, required Map<String, dynamic> data}) {
-    // TODO: implement updateData
-    throw UnimplementedError();
-  }
+  // @override
+  // Future<void> updateData(
+  //     {required TableData tableData, required int id, required Map<String, dynamic> data}) {
+  //   // TODO: implement updateData
+  //   throw UnimplementedError();
+  // }
 }
