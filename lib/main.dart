@@ -5,13 +5,14 @@ import 'package:text_to_speech/config/supbase_service.dart';
 import 'package:text_to_speech/src/count/bloc/count_bloc.dart';
 import 'package:text_to_speech/src/count/events/count_event.dart';
 import 'package:text_to_speech/src/count/states/count_state.dart';
+import 'package:text_to_speech/src/login/login_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // get dotenv
   await dotenv.load(fileName: ".env");
-  SupbaseConfig().initSupabase(
-      dotenv.env['SUPABASE_URL'].toString(), dotenv.env['SUPABASE_CLIENT_API_KEY'].toString());
+  SupbaseConfig().initSupabase(dotenv.env['SUPABASE_URL'].toString(),
+      dotenv.env['SUPABASE_CLIENT_API_KEY'].toString());
   runApp(MyApp());
 }
 
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
       ),
       home: BlocProvider(
         create: (context) => CounterBloc(),
-        child: MyHomePage(),
+        child: LoginScreen(),
       ),
     );
   }
