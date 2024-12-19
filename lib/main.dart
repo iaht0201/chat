@@ -2,18 +2,33 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:text_to_speech/config/supbase_service.dart';
-import 'package:text_to_speech/src/count/bloc/count_bloc.dart';
-import 'package:text_to_speech/src/count/events/count_event.dart';
-import 'package:text_to_speech/src/count/states/count_state.dart';
-import 'package:text_to_speech/src/login/login_screen.dart';
+import 'package:text_to_speech/src/login/authen_screen.dart';
+import 'package:text_to_speech/src/login/blog/login_bloc.dart';
+import 'package:text_to_speech/src/login/repository.dart';
+import 'package:text_to_speech/src/login/service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // get dotenv
+  // Load dotenv
   await dotenv.load(fileName: ".env");
-  SupbaseConfig().initSupabase(dotenv.env['SUPABASE_URL'].toString(),
-      dotenv.env['SUPABASE_CLIENT_API_KEY'].toString());
-  runApp(MyApp());
+  SupbaseConfig().initSupabase(
+      dotenv.env['SUPABASE_URL'].toString(), dotenv.env['SUPABASE_CLIENT_API_KEY'].toString());
+  runApp(MultiRepositoryProvider(
+    providers: [
+      RepositoryProvider<AuthService>(create: (_) => AuthService(SupbaseConfig.client!)),
+      RepositoryProvider<AuthRepository>(
+        create: (context) => AuthRepository(authService: context.read<AuthService>()),
+      ),
+    ],
+    child: MultiBlocProvider(
+      providers: [
+        BlocProvider<LoginBloc>(
+          create: (context) => LoginBloc(context.read<AuthRepository>()),
+        ),
+      ],
+      child: MyApp(),
+    ),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -24,47 +39,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: BlocProvider(
-        create: (context) => CounterBloc(),
-        child: LoginScreen(),
-      ),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final CounterBloc counterBloc = BlocProvider.of<CounterBloc>(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Material App'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Counter Value:',
-            ),
-            BlocBuilder<CounterBloc, CounterState>(
-              builder: (context, state) {
-                return Text(
-                  '${state.count}',
-                  // style: Theme.of(context).textTheme.headline4,
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          counterBloc.add(IncrementEvent());
-        },
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
+      home: LoginScreen(),
     );
   }
 }

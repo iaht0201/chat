@@ -21,6 +21,7 @@ mixin _$LoginState {
   bool get isSubmitting => throw _privateConstructorUsedError;
   bool get isSuccess => throw _privateConstructorUsedError;
   bool get isFailure => throw _privateConstructorUsedError;
+  String? get errorMessage => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $LoginStateCopyWith<LoginState> get copyWith =>
@@ -38,7 +39,8 @@ abstract class $LoginStateCopyWith<$Res> {
       String password,
       bool isSubmitting,
       bool isSuccess,
-      bool isFailure});
+      bool isFailure,
+      String? errorMessage});
 }
 
 /// @nodoc
@@ -59,6 +61,7 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
     Object? isSubmitting = null,
     Object? isSuccess = null,
     Object? isFailure = null,
+    Object? errorMessage = freezed,
   }) {
     return _then(_value.copyWith(
       email: null == email
@@ -81,6 +84,10 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
           ? _value.isFailure
           : isFailure // ignore: cast_nullable_to_non_nullable
               as bool,
+      errorMessage: freezed == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -98,7 +105,8 @@ abstract class _$$LoginStateImplCopyWith<$Res>
       String password,
       bool isSubmitting,
       bool isSuccess,
-      bool isFailure});
+      bool isFailure,
+      String? errorMessage});
 }
 
 /// @nodoc
@@ -117,6 +125,7 @@ class __$$LoginStateImplCopyWithImpl<$Res>
     Object? isSubmitting = null,
     Object? isSuccess = null,
     Object? isFailure = null,
+    Object? errorMessage = freezed,
   }) {
     return _then(_$LoginStateImpl(
       email: null == email
@@ -139,6 +148,10 @@ class __$$LoginStateImplCopyWithImpl<$Res>
           ? _value.isFailure
           : isFailure // ignore: cast_nullable_to_non_nullable
               as bool,
+      errorMessage: freezed == errorMessage
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -151,7 +164,8 @@ class _$LoginStateImpl implements _LoginState {
       required this.password,
       required this.isSubmitting,
       required this.isSuccess,
-      required this.isFailure});
+      required this.isFailure,
+      this.errorMessage});
 
   @override
   final String email;
@@ -163,10 +177,12 @@ class _$LoginStateImpl implements _LoginState {
   final bool isSuccess;
   @override
   final bool isFailure;
+  @override
+  final String? errorMessage;
 
   @override
   String toString() {
-    return 'LoginState(email: $email, password: $password, isSubmitting: $isSubmitting, isSuccess: $isSuccess, isFailure: $isFailure)';
+    return 'LoginState(email: $email, password: $password, isSubmitting: $isSubmitting, isSuccess: $isSuccess, isFailure: $isFailure, errorMessage: $errorMessage)';
   }
 
   @override
@@ -182,12 +198,14 @@ class _$LoginStateImpl implements _LoginState {
             (identical(other.isSuccess, isSuccess) ||
                 other.isSuccess == isSuccess) &&
             (identical(other.isFailure, isFailure) ||
-                other.isFailure == isFailure));
+                other.isFailure == isFailure) &&
+            (identical(other.errorMessage, errorMessage) ||
+                other.errorMessage == errorMessage));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, email, password, isSubmitting, isSuccess, isFailure);
+  int get hashCode => Object.hash(runtimeType, email, password, isSubmitting,
+      isSuccess, isFailure, errorMessage);
 
   @JsonKey(ignore: true)
   @override
@@ -202,7 +220,8 @@ abstract class _LoginState implements LoginState {
       required final String password,
       required final bool isSubmitting,
       required final bool isSuccess,
-      required final bool isFailure}) = _$LoginStateImpl;
+      required final bool isFailure,
+      final String? errorMessage}) = _$LoginStateImpl;
 
   @override
   String get email;
@@ -214,6 +233,8 @@ abstract class _LoginState implements LoginState {
   bool get isSuccess;
   @override
   bool get isFailure;
+  @override
+  String? get errorMessage;
   @override
   @JsonKey(ignore: true)
   _$$LoginStateImplCopyWith<_$LoginStateImpl> get copyWith =>

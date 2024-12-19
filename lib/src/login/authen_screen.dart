@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:text_to_speech/src/login/blog/login_bloc.dart';
 import 'package:text_to_speech/src/login/events/login_event.dart';
+import 'package:text_to_speech/src/login/repository.dart';
 import 'package:text_to_speech/src/login/states/login_state.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => LoginBloc(),
+      create: (context) => LoginBloc(context.read<AuthRepository>()),
       child: Scaffold(
         appBar: AppBar(title: const Text("Login")),
         body: BlocListener<LoginBloc, LoginState>(
@@ -19,7 +20,7 @@ class LoginScreen extends StatelessWidget {
               );
             } else if (state.isFailure) {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Login Failed!")),
+                SnackBar(content: Text(state.errorMessage ?? "Login Failed!")),
               );
             }
           },
@@ -31,28 +32,21 @@ class LoginScreen extends StatelessWidget {
                   children: [
                     TextField(
                       onChanged: (value) {
-                        context
-                            .read<LoginBloc>()
-                            .add(LoginEvent.emailChanged(value));
+                        context.read<LoginBloc>().add(LoginEvent.emailChanged(value));
                       },
                       decoration: InputDecoration(
                         labelText: "Email",
-                        errorText:
-                            state.email.isEmpty ? "Email is required" : null,
+                        errorText: state.email.isEmpty ? "Email is required" : null,
                       ),
                     ),
                     TextField(
                       obscureText: true,
                       onChanged: (value) {
-                        context
-                            .read<LoginBloc>()
-                            .add(LoginEvent.passwordChanged(value));
+                        context.read<LoginBloc>().add(LoginEvent.passwordChanged(value));
                       },
                       decoration: InputDecoration(
                         labelText: "Password",
-                        errorText: state.password.isEmpty
-                            ? "Password is required"
-                            : null,
+                        errorText: state.password.isEmpty ? "Password is required" : null,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -60,9 +54,7 @@ class LoginScreen extends StatelessWidget {
                         ? const CircularProgressIndicator()
                         : ElevatedButton(
                             onPressed: () {
-                              context
-                                  .read<LoginBloc>()
-                                  .add(const LoginEvent.submitted());
+                              context.read<LoginBloc>().add(const LoginEvent.submitted());
                             },
                             child: const Text("Login"),
                           ),

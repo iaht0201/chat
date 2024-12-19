@@ -10,6 +10,7 @@ class LoginState with _$LoginState {
     required bool isSubmitting,
     required bool isSuccess,
     required bool isFailure,
+    String? errorMessage,
   }) = _LoginState;
 
   factory LoginState.initial() {
@@ -19,6 +20,7 @@ class LoginState with _$LoginState {
       isSubmitting: false,
       isSuccess: false,
       isFailure: false,
+      errorMessage: null,
     );
   }
 }

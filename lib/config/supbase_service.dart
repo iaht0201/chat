@@ -40,7 +40,6 @@ class SupbaseConfig extends SupbaseService {
 
   @override
   Future fetchData(String id) {
-    // TODO: implement fetchData
     throw UnimplementedError();
   }
 
@@ -50,12 +49,11 @@ class SupbaseConfig extends SupbaseService {
     await client?.from(TableSupabase.getTable(tableData).toString()).update(data).eq('id', 1);
   }
 
-  @override
-  Future<void> updateData(
-      {required TableData tableData, required int id, required Map<String, dynamic> data}) {
-    // TODO: implement updateData
-    throw UnimplementedError();
-  }
+  // @override
+  // Future<void> updateData(
+  //     {required TableData tableData, required int id, required Map<String, dynamic> data}) {
+  //   throw UnimplementedError();
+  // }
 
   @override
   Future<dynamic> upsertData(
